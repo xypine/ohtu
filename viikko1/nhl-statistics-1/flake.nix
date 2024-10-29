@@ -16,7 +16,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         # see https://github.com/nix-community/poetry2nix/tree/master#api for more functions and examples.
-        dependency-injection-1 = { poetry2nix, lib }: poetry2nix.mkPoetryApplication {
+        nhl-statistics = { poetry2nix, lib }: poetry2nix.mkPoetryApplication {
           projectDir = self;
           overrides = poetry2nix.overrides.withDefaults (final: super:
             lib.mapAttrs
@@ -35,13 +35,13 @@
           overlays = [
             poetry2nix.overlays.default
             (final: _: {
-              dependency-injection-1 = final.callPackage dependency-injection-1 { };
+              nhl-statistics = final.callPackage nhl-statistics { };
             })
           ];
         };
       in
       {
-        packages.default = pkgs.dependency-injection-1;
+        packages.default = pkgs.nhl-statistics;
         devShells = {
           # Shell for app dependencies.
           #
@@ -49,7 +49,7 @@
           #
           # Use this shell for developing your app.
           default = pkgs.mkShell {
-            inputsFrom = [ pkgs.dependency-injection-1 ];
+            inputsFrom = [ pkgs.nhl-statistics ];
           };
 
           # Shell for poetry.
