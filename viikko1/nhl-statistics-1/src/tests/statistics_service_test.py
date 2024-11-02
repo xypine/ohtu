@@ -1,6 +1,6 @@
 import unittest
 from player_reader import PlayerReader
-from statistics_service import StatisticsService
+from statistics_service import SortBy, StatisticsService
 from player import Player
 
 class PlayerReaderStub(PlayerReader):
@@ -36,7 +36,7 @@ class TestStatisticsService(unittest.TestCase):
         player_names_edm = [player.name for player in players_in_edm]
         self.assertEqual(player_names_edm, ["Semenko", "Kurri", "Gretzky"])
 
-    def test_top(self):
+    def test_top_ranges(self):
         # Invalid how_many
         self.assertEqual([player.name for player in self.stats.top(-2)], [])
         self.assertEqual([player.name for player in self.stats.top(-1)], [])
@@ -44,3 +44,10 @@ class TestStatisticsService(unittest.TestCase):
         self.assertEqual([player.name for player in self.stats.top(0)], ["Gretzky"])
         # More
         self.assertEqual([player.name for player in self.stats.top(2)], ["Gretzky", "Lemieux", "Yzerman"])
+
+    def test_top_by_points(self):
+        self.assertEqual([player.name for player in self.stats.top(2, SortBy.POINTS)], ["Gretzky", "Lemieux", "Yzerman"])
+    def test_top_by_goals(self):
+        self.assertEqual([player.name for player in self.stats.top(2, SortBy.GOALS)], ['Lemieux', 'Yzerman', 'Kurri'])
+    def test_top_by_assists(self):
+        self.assertEqual([player.name for player in self.stats.top(2, SortBy.ASSISTS)], ['Gretzky', 'Yzerman', 'Lemieux'])
