@@ -48,6 +48,29 @@ Register With Username That Is Already In Use
     Submit Credentials
     Register Should Fail With Message  That username is already in use
 
+Login After Successful Registration
+	Set Username  kayttaja
+	Set Password  salasana123
+	Set Password Confirmation  salasana123
+	Submit Credentials
+	Logout
+   Set Username  kayttaja
+   Set Password  salasana123
+   Click Button  Login
+   Main Page Should Be Open
+
+Login After Failed Registration
+	Set Username  kalleviis
+	Set Password  123456
+	Set Password Confirmation  abcdef
+	Submit Credentials
+	Register Should Fail With Message  Password and password confirmation did not match
+	Go To Login Page
+	Set Username  kalleviis
+	Set Password  123456
+   Click Button  Login
+	Page Should Contain  Invalid username or password
+
 *** Keywords ***
 Register Should Succeed
     Welcome Page Should Be Open
@@ -77,3 +100,7 @@ Reset Application Create User And Go To Register Page
     Reset Application
     Create User  kalle  kalle123
     Go To Register Page
+
+Logout
+	Go To Main Page
+   Click Button  Logout
