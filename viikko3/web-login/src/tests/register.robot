@@ -6,7 +6,7 @@ Test Setup      Reset Application Create User And Go To Register Page
 
 *** Test Cases ***
 Register With Valid Username And Password
-    Set Username  kalle2
+    Set Username  kalleB
     Set Password  kalle123
     Set Password Confirmation  kalle123
     Submit Credentials
@@ -17,36 +17,36 @@ Register With Too Short Username And Valid Password
     Set Password  kalle123
     Set Password Confirmation  kalle123
     Submit Credentials
-    Register Should Fail With Message  username too short
+    Register Should Fail With Message  Username too short
 
 Register With Valid Username And Too Short Password
-    Set Username  kalle3
+    Set Username  kallekolme
     Set Password  k
     Set Password Confirmation  k
     Submit Credentials
-    Register Should Fail With Message  username too short
+    Register Should Fail With Message  Password too short
 
 Register With Valid Username And Invalid Password
 # salasana ei sisällä halutunlaisia merkkejä
-    Set Username  kalle4
-    Set Password  k
-    Set Password Confirmation  k
+    Set Username  kalleneljä
+    Set Password  yykaakoonee
+    Set Password Confirmation  yykaakoonee
     Submit Credentials
-    Register Should Fail With Message  lalalala
+    Register Should Fail With Message  Password shouldn't consist of letters only
 
 Register With Nonmatching Password And Password Confirmation
-    Set Username  kalle5
+    Set Username  kalleviis
     Set Password  123456
     Set Password Confirmation  abcdef
     Submit Credentials
-    Register Should Fail With Message  lalalala
+    Register Should Fail With Message  Password and password confirmation did not match
 
 Register With Username That Is Already In Use
     Set Username  kalle
     Set Password  kalle123
     Set Password Confirmation  kalle123
     Submit Credentials
-    Register Should Succeed
+    Register Should Fail With Message  That username is already in use
 
 *** Keywords ***
 Register Should Succeed
