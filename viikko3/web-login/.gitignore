@@ -1,0 +1,14 @@
+# Temporary files
+*.tmp
+# Python
+**/__pycache__
+**/.pytest_cache
+# Test coverage reports
+.coverage
+htmlcov
+coverage.xml
+# E2E test related files
+log.html
+output.xml
+report.html
+selenium-screenshot*
