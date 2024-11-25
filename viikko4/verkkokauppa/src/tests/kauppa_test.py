@@ -88,3 +88,28 @@ class TestKauppa(unittest.TestCase):
 
         # varmistetaan, että metodia tilisiirto on kutsuttu oikeilla argumenteilla
         self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, "23451", self.kauppa._kaupan_tili, 5 + 0)
+
+    def test_aloita_asiointi_nollaa(self):
+        # tehdään ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "23451")
+
+        # varmistetaan, että metodia tilisiirto on kutsuttu oikeilla argumenteilla
+        self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, "23451", self.kauppa._kaupan_tili, 5)
+
+    def test_uusi_maksu_kutsuu_uuden_viitteen(self):
+        # aloitetaan asiointi
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "09876")
+        self.assertEqual(self.viitegeneraattori_mock.uusi.call_count, 1)
+
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "09876")
+        self.assertEqual(self.viitegeneraattori_mock.uusi.call_count, 2)
