@@ -67,18 +67,9 @@ impl Game for TennisGame {
                 "Win for player2".to_owned()
             }
             _ => {
-                let mut temp_score: u8;
-                let mut score = String::new();
-                for i in 1..3 {
-                    if i == 1 {
-                        temp_score = self.score1;
-                    } else {
-                        score.push_str("-");
-                        temp_score = self.score2;
-                    }
-                    score.push_str(&temp_score.as_score());
-                }
-                return score;
+                let score1 = self.score1.as_score();
+                let score2 = self.score2.as_score();
+                format!("{score1}-{score2}")
             }
         }
     }
