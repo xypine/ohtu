@@ -12,6 +12,28 @@ pub struct TennisGame {
     _player2_name: String,
 }
 
+trait TennisScore {
+    fn as_score(&self) -> String;
+    fn as_score_tied(&self) -> String;
+}
+impl TennisScore for u8 {
+    fn as_score(&self) -> String {
+        match self {
+            3 => "Forty",
+            2 => "Thirty",
+            1 => "Fifteen",
+            _ => "Love",
+        }.to_owned()
+    }
+    fn as_score_tied(&self) -> String {
+        if *self > 2 {
+            return "Deuce".to_owned();
+        }
+        let score = self.as_score();
+        format!("{score}-All")
+    }
+}
+
 impl TennisGame {
     pub fn new() -> Self {
         Self::default()
@@ -32,12 +54,7 @@ impl Game for TennisGame {
     }
     fn get_score(&self) -> String {
         match (self.score1, self.score2) {
-            (a, b) if a == b => match a {
-                0 => return "Love-All".to_owned(),
-                1 => return "Fifteen-All".to_owned(),
-                2 => return "Thirty-All".to_owned(),
-                _ => return "Deuce".to_owned(),
-            },
+            (a, b) if a == b => a.as_score_tied(),
             (a, b) if a >= 4 || b >= 4 => {
                 let minus_result = self.score1 as i8 - self.score2 as i8;
                 if minus_result == 1 {
@@ -59,13 +76,7 @@ impl Game for TennisGame {
                         score.push_str("-");
                         temp_score = self.score2;
                     }
-                    match temp_score {
-                        0 => score.push_str("Love"),
-                        1 => score.push_str("Fifteen"),
-                        2 => score.push_str("Thirty"),
-                        3 => score.push_str("Forty"),
-                        _ => {}
-                    }
+                    score.push_str(&temp_score.as_score());
                 }
                 return score;
             }
