@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 from player import Player
 
 # Abstract class for common functionality of matchers
@@ -68,3 +69,21 @@ class HasFewerThan(Matcher):
         player_value = getattr(player, self._attr)
 
         return player_value < self._value
+
+class QueryBuilder:
+    def __init__(self, matcher: Matcher = All()):
+        self._matcher = matcher
+    def _chain(self, matcher: Matcher):
+        return QueryBuilder(And(self._matcher, matcher))
+
+    def plays_in(self, team: str):
+        return self._chain(PlaysIn(team))
+
+    def has_at_least(self, value: int, attr: str):
+        return self._chain(HasAtLeast(value, attr))
+
+    def has_fewer_than(self, value: int, attr: str):
+        return self._chain(HasFewerThan(value, attr))
+
+    def build(self):
+        return self._matcher
