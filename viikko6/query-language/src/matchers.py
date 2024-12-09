@@ -8,8 +8,13 @@ class Matcher(ABC):
     def test(self, player: Player) -> bool:
         pass
 
+
+class All(Matcher):
+    def test(self, player: Player) -> bool:
+        return True
+
 class And(Matcher):
-    def __init__(self, *matchers):
+    def __init__(self, *matchers: Matcher):
         self._matchers = matchers
 
     def test(self, player):
@@ -19,17 +24,22 @@ class And(Matcher):
 
         return True
 
+class Not(Matcher):
+    def __init__(self, matcher: Matcher):
+        self._matcher = matcher
+
+    def test(self, player):
+        return not self._matcher.test(player)
 
 class PlaysIn(Matcher):
-    def __init__(self, team):
+    def __init__(self, team: str):
         self._team = team
 
     def test(self, player):
         return player.team == self._team
 
-
 class HasAtLeast(Matcher):
-    def __init__(self, value, attr):
+    def __init__(self, value: int, attr: str):
         self._value = value
         self._attr = attr
 
@@ -37,3 +47,13 @@ class HasAtLeast(Matcher):
         player_value = getattr(player, self._attr)
 
         return player_value >= self._value
+
+class HasFewerThan(Matcher):
+    def __init__(self, value: int, attr: str):
+        self._value = value
+        self._attr = attr
+
+    def test(self, player):
+        player_value = getattr(player, self._attr)
+
+        return player_value < self._value
