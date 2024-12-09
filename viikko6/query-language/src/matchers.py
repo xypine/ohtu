@@ -13,6 +13,13 @@ class All(Matcher):
     def test(self, player: Player) -> bool:
         return True
 
+class Not(Matcher):
+    def __init__(self, matcher: Matcher):
+        self._matcher = matcher
+
+    def test(self, player):
+        return not self._matcher.test(player)
+
 class And(Matcher):
     def __init__(self, *matchers: Matcher):
         self._matchers = matchers
@@ -24,12 +31,16 @@ class And(Matcher):
 
         return True
 
-class Not(Matcher):
-    def __init__(self, matcher: Matcher):
-        self._matcher = matcher
+class Or(Matcher):
+    def __init__(self, *matchers: Matcher):
+        self._matchers = matchers
 
     def test(self, player):
-        return not self._matcher.test(player)
+        for matcher in self._matchers:
+            if matcher.test(player):
+                return True
+
+        return False
 
 class PlaysIn(Matcher):
     def __init__(self, team: str):
