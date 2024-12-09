@@ -1,4 +1,8 @@
 class Player:
+    name: str
+    team: str
+    goals: int
+    assists: int
     def __init__(self, name, team, goals, assists):
         self.name = name
         self.team = team

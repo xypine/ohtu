@@ -1,3 +1,4 @@
+from matchers import Matcher
 from player_reader import PlayerReader
 
 
@@ -6,7 +7,7 @@ def sort_by_points(player):
 
 
 class Statistics:
-    def __init__(self, player_reader):
+    def __init__(self, player_reader: PlayerReader):
         self._players = player_reader.get_players()
 
     def search(self, name):
@@ -33,7 +34,7 @@ class Statistics:
 
         return sorted_players[:how_many]
 
-    def matches(self, matcher):
+    def matches(self, matcher: Matcher):
         matching_players = filter(
             lambda player: matcher.test(player),
             self._players
