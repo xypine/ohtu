@@ -75,6 +75,8 @@ class QueryBuilder:
         self._matcher = matcher
     def _chain(self, matcher: Matcher):
         return QueryBuilder(And(self._matcher, matcher))
+    def one_of(self, *matchers: Matcher):
+        return QueryBuilder(Or(*matchers))
 
     def plays_in(self, team: str):
         return self._chain(PlaysIn(team))
